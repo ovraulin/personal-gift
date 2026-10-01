@@ -4,15 +4,18 @@
 
 import time
 
+import neopixel
 import st7789py
 from machine import SPI, Pin
 
 from mascota.face import draw_face
+from mascota.mood_color import color_for_mood
 from mascota.state import Mood
 
 WIDTH = 172
 HEIGHT = 320
 MOOD_DELAY_SECONDS = 4
+RGB_LED_PIN = 38
 
 # Demo: itera todas las expresiones indefinidamente. Cuando haya lógica real
 # de interacción, esto se reemplaza por el loop de PetState.tick() + redibujo
@@ -45,11 +48,25 @@ def make_display():
     return display
 
 
+def make_rgb_led():
+    return neopixel.NeoPixel(Pin(RGB_LED_PIN), 1)
+
+
+def set_rgb_led(led, color):
+    # Esta placa manda los canales invertidos: pedís (r, g, b) y sale en
+    # pantalla como si fuera (g, r, b). Lo compensamos acá al escribir.
+    r, g, b = color
+    led[0] = (g, r, b)
+    led.write()
+
+
 def main():
     display = make_display()
+    led = make_rgb_led()
     while True:
         for mood in MOODS:
             draw_face(display, mood, WIDTH, HEIGHT)
+            set_rgb_led(led, color_for_mood(mood))
             time.sleep(MOOD_DELAY_SECONDS)
 
 
