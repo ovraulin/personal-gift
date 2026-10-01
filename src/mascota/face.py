@@ -11,7 +11,7 @@ from mascota.state import Mood
 BLACK = 0x0000
 WHITE = 0xFFFF
 
-EYE_RADIUS_RATIO = 0.08
+EYE_RADIUS_RATIO = 0.104
 EYE_Y_RATIO = 0.38
 EYE_OFFSET_X_RATIO = 0.22
 
@@ -39,7 +39,10 @@ def draw_face(canvas, mood, width, height, bg_color=BLACK, fg_color=WHITE):
 
 
 def _draw_eyes(canvas, mood, width, height, color):
-    radius = int(width * EYE_RADIUS_RATIO)
+    # El radio escala con el lado más chico de la pantalla (no con `width`
+    # a secas) para que no se agranden desproporcionadamente en horizontal,
+    # donde width >> height.
+    radius = int(min(width, height) * EYE_RADIUS_RATIO)
     center_y = int(height * EYE_Y_RATIO)
     offset_x = int(width * EYE_OFFSET_X_RATIO)
     upper_half_only = mood == Mood.TIRED

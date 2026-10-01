@@ -1,4 +1,5 @@
-# Entry point para la ESP32-S3 (Waveshare ESP32-S3-LCD-1.47, 172x320 ST7789).
+# Entry point para la ESP32-S3 (Waveshare ESP32-S3-LCD-1.47, 172x320 ST7789,
+# usada en horizontal: rotation=1 -> 320x172).
 # Para deployar: copiar este archivo + st7789py.py (ambos de este directorio)
 # y la carpeta src/mascota/ a la raíz del filesystem del device.
 
@@ -12,8 +13,8 @@ from mascota.face import draw_face
 from mascota.mood_color import color_for_mood
 from mascota.state import Mood
 
-WIDTH = 172
-HEIGHT = 320
+WIDTH = 320
+HEIGHT = 172
 MOOD_DELAY_SECONDS = 4
 RGB_LED_PIN = 38
 
@@ -40,10 +41,10 @@ def make_display():
         cs=Pin(42, Pin.OUT),
         dc=Pin(41, Pin.OUT),
         backlight=Pin(46, Pin.OUT),
-        xstart=34,
-        ystart=0,
+        xstart=0,
+        ystart=34,
     )
-    display.init()
+    display.init(rotation=1)
     display.backlight(1)
     return display
 
