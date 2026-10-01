@@ -18,6 +18,7 @@ testpaths = ["tests"]
 target-version = "py311"
 line-length = 88
 src = ["src"]
+extend-exclude = ["device/st7789py.py"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
